@@ -15,28 +15,17 @@ const ui = {
     // Screens
     titleScreen: document.getElementById('title-screen'),
     gameScreen: document.getElementById('game-screen'),
-    highscoresScreen: document.getElementById('highscores-screen'),
-    gameOverScreen: document.getElementById('game-over'),
     
     // Buttons
-    startBtn: document.getElementById('start-btn'),
-    highscoresBtn: document.getElementById('highscores-btn'),
-    backBtn: document.getElementById('back-btn'),
-    restartBtn: document.getElementById('restart-btn'),
-    toHighscoresBtn: document.getElementById('to-highscores-btn'),
-    exitBtn: document.getElementById('exit-btn'),
-    exitToMenuBtn: document.getElementById('exit-to-menu-btn'),
+    newGameBtn: document.getElementById('new-game-btn'),
+    loadGameBtn: document.getElementById('load-game-btn'),
+    optionsBtn: document.getElementById('options-btn'),
+    exitBtn: document.getElementById('exit-rpg-btn'),
     
     // Game UI
     levelEl: document.getElementById('level'),
     experienceEl: document.getElementById('experience'),
     healthEl: document.getElementById('health'),
-    finalLevelEl: document.getElementById('final-level'),
-    finalExpEl: document.getElementById('final-exp'),
-    newHighscoreEl: document.getElementById('new-highscore'),
-    playerNameInput: document.getElementById('player-name'),
-    personalHighscoresEl: document.getElementById('personal-highscores'),
-    globalHighscoresEl: document.getElementById('global-highscores')
 };
 
 // Game state
@@ -77,33 +66,20 @@ function setupEventListeners() {
     document.addEventListener('keyup', handleKeyUp);
     
     // UI Buttons
-    ui.startBtn.addEventListener('click', () => showScreen('game'));
-    ui.highscoresBtn.addEventListener('click', () => showScreen('highscores'));
-    ui.backBtn.addEventListener('click', () => showScreen('title'));
-    ui.exitBtn.addEventListener('click', () => window.close());
-    ui.exitToMenuBtn.addEventListener('click', () => window.close());
-
-    ui.restartBtn.addEventListener('click', () => {
-        if (ui.newHighscoreEl.style.display === 'block') {
-            const name = ui.playerNameInput.value.trim() || 'Player';
-            submitHighscore(name, gameState.level, gameState.experience).then(() => {
-                resetGame();
-                showScreen('game');
-            });
-        } else {
-            resetGame();
-            showScreen('game');
-        }
+    ui.newGameBtn.addEventListener('click', () => showScreen('game'));
+    ui.loadGameBtn.addEventListener('click', () => {
+        console.log('Load Game clicked - functionality to be implemented.');
+        alert('Laden-Funktion noch nicht implementiert.');
     });
-
-    ui.toHighscoresBtn.addEventListener('click', () => {
-        if (ui.newHighscoreEl.style.display === 'block') {
-            const name = ui.playerNameInput.value.trim() || 'Player';
-            submitHighscore(name, gameState.level, gameState.experience).then(() => {
-                showScreen('highscores');
-            });
-        } else {
-            showScreen('highscores');
+    ui.optionsBtn.addEventListener('click', () => {
+        console.log('Options clicked - functionality to be implemented.');
+        alert('Optionen-Funktion noch nicht implementiert.');
+    });
+    ui.exitBtn.addEventListener('click', () => {
+        console.log('Exit to main menu.');
+        // This assumes the game is embedded and can talk to a parent window.
+        if (window.parent) {
+            window.parent.postMessage({ type: 'game:exit' }, '*');
         }
     });
 }
@@ -111,30 +87,17 @@ function setupEventListeners() {
 // Show a specific screen
 function showScreen(screenId) {
     // Hide all screens
-    Object.values(ui).forEach(element => {
-        if (element && element.style) {
-            element.style.display = 'none';
-        }
-    });
+    if (ui.titleScreen) ui.titleScreen.style.display = 'none';
+    if (ui.gameScreen) ui.gameScreen.style.display = 'none';
     
     // Show the requested screen
     switch(screenId) {
         case 'title':
-            ui.titleScreen.style.display = 'block';
+            if (ui.titleScreen) ui.titleScreen.style.display = 'flex'; // Use flex to center content
             break;
         case 'game':
-            ui.gameScreen.style.display = 'block';
+            if (ui.gameScreen) ui.gameScreen.style.display = 'block';
             resetGame();
-            break;
-        case 'highscores':
-            ui.highscoresScreen.style.display = 'block';
-            loadHighscores();
-            break;
-        case 'gameOver':
-            ui.gameOverScreen.style.display = 'block';
-            ui.finalLevelEl.textContent = gameState.level;
-            ui.finalExpEl.textContent = gameState.experience;
-            checkHighscore();
             break;
     }
 }
@@ -273,7 +236,8 @@ function isColliding(obj1, obj2) {
 
 function gameOver() {
     gameState.isGameOver = true;
-    showScreen('gameOver');
+    // showScreen('gameOver'); // Game over screen not implemented yet
+    console.log("Game Over!");
 }
 
 function resetGame() {
@@ -308,89 +272,6 @@ function handleKeyDown(e) {
 
 function handleKeyUp(e) {
     keys[e.key] = false;
-}
-
-// Highscore functions
-function loadHighscores() {
-    // Load personal highscores from localStorage
-    const personalHighscores = JSON.parse(localStorage.getItem('rpgPersonalHighscores') || '[]');
-    displayHighscores(personalHighscores, ui.personalHighscoresEl);
-
-    // Load global highscores from server (placeholder for now)
-    const globalHighscores = JSON.parse(localStorage.getItem('rpgGlobalHighscores') || '[]');
-    displayHighscores(globalHighscores, ui.globalHighscoresEl);
-}
-
-function displayHighscores(highscores, element) {
-    element.innerHTML = '';
-
-    if (highscores.length === 0) {
-        element.innerHTML = '<li>Keine Highscores verfügbar</li>';
-        return;
-    }
-
-    // Sort by level and experience (highest first) and take top 10
-    const topScores = highscores
-        .sort((a, b) => {
-            if (b.level !== a.level) return b.level - a.level;
-            return b.experience - a.experience;
-        })
-        .slice(0, 10);
-
-    topScores.forEach((entry, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${index + 1}. ${entry.name}</span>
-            <span>Level ${entry.level} (${entry.experience} XP)</span>
-        `;
-        element.appendChild(li);
-    });
-}
-
-function checkHighscore() {
-    const personalHighscores = JSON.parse(localStorage.getItem('rpgPersonalHighscores') || '[]');
-    const currentScore = { level: gameState.level, experience: gameState.experience };
-
-    const isNewPersonalHighscore = personalHighscores.length < 10 ||
-        personalHighscores.some(h => h.level < currentScore.level ||
-            (h.level === currentScore.level && h.experience < currentScore.experience));
-
-    if (isNewPersonalHighscore) {
-        ui.newHighscoreEl.style.display = 'block';
-        ui.playerNameInput.focus();
-    } else {
-        ui.newHighscoreEl.style.display = 'none';
-    }
-}
-
-async function submitHighscore(name, level, experience) {
-    // Add to personal highscores
-    const personalHighscores = JSON.parse(localStorage.getItem('rpgPersonalHighscores') || '[]');
-    personalHighscores.push({ name, level, experience, date: new Date().toISOString() });
-
-    // Keep only top 10
-    personalHighscores.sort((a, b) => {
-        if (b.level !== a.level) return b.level - a.level;
-        return b.experience - a.experience;
-    });
-    const top10 = personalHighscores.slice(0, 10);
-
-    localStorage.setItem('rpgPersonalHighscores', JSON.stringify(top10));
-
-    // TODO: Submit to server for global highscores
-    // For now, we'll use localStorage for global highscores too
-    const globalHighscores = JSON.parse(localStorage.getItem('rpgGlobalHighscores') || '[]');
-    globalHighscores.push({ name, level, experience, date: new Date().toISOString() });
-
-    globalHighscores.sort((a, b) => {
-        if (b.level !== a.level) return b.level - a.level;
-        return b.experience - a.experience;
-    });
-    const top10Global = globalHighscores.slice(0, 10);
-
-    localStorage.setItem('rpgGlobalHighscores', JSON.stringify(top10Global));
-
-    return Promise.resolve();
 }
 
 // Start the game

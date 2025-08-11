@@ -1,16 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
 body, html {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #1a1a2e;
+    background-color: #1a1a2e; /* Fallback color */
+    background-image: url('/images/Background_Spiel.png');
+    background-size: cover;
+    background-position: center;
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: 'Cinzel', serif;
 }
 
-#rpg-world {
+#game-container {
     position: relative;
     width: 100vw;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3); /* Darken the background image slightly */
+}
+
+#title-screen {
+    background: rgba(0, 0, 0, 0.75);
+    padding: 40px;
+    border: 2px solid #c9b037;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game-logo {
+    max-width: 80%;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.menu-buttons button {
+    background-color: #4a2c2a; /* Dark wood color */
+    color: #f5eacb;
+    border: 2px solid #c9b037; /* Gold border */
+    border-radius: 8px;
+    padding: 15px 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.3em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: 1px 1px 3px #000;
+}
+
+.menu-buttons button:hover {
+    background-color: #6d4c41; /* Lighter wood color */
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.menu-buttons button:active {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+#game-screen {
+    display: none;
+    width: 100%;
+    height: 100%;
 }
 
 #rpgCanvas {
@@ -23,7 +90,9 @@ body, html {
     position: absolute;
     bottom: 10px;
     left: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #c9b037;
+    color: #f5eacb;
 }

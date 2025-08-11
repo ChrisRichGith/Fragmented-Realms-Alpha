@@ -7,13 +7,28 @@
     <link rel="stylesheet" href="rpg.css">
 </head>
 <body>
-    <div id="rpg-world">
-        <canvas id="rpgCanvas"></canvas>
+    <div id="game-container">
+        <!-- Title Screen -->
+        <div id="title-screen">
+            <img src="/images/Logo.png" alt="Game Logo" id="game-logo">
+            <div class="menu-buttons">
+                <button id="new-game-btn">Neues Spiel</button>
+                <button id="load-game-btn">Spiel fortsetzen</button>
+                <button id="options-btn">Optionen</button>
+                <button id="exit-rpg-btn">Zurück zum Hauptmenü</button>
+            </div>
+        </div>
+
+        <!-- Game Screen (initially hidden) -->
+        <div id="game-screen" style="display: none;">
+            <canvas id="rpgCanvas"></canvas>
+            <div id="rpg-ui">
+                <p id="level">Level: 1</p>
+                <p id="experience">Erfahrung: 0/100</p>
+                <p id="health">Leben: 100/100</p>
+            </div>
+        </div>
     </div>
-    <div id="rpg-ui">
-        <!-- UI elements for the RPG will go here -->
-        <p>RPG Game - Work in Progress</p>
-    </div>
-    <script src="rpg.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>
