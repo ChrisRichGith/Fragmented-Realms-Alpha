@@ -19,9 +19,33 @@
             </div>
         </div>
 
+        <!-- Options Screen (initially hidden) -->
+        <div id="options-screen" style="display: none;">
+            <h2>Optionen</h2>
+            <div class="option-item">
+                <label for="music-volume">Musik</label>
+                <input type="range" id="music-volume" min="0" max="100" value="80">
+            </div>
+            <div class="option-item">
+                <label for="sfx-volume">Soundeffekte</label>
+                <input type="range" id="sfx-volume" min="0" max="100" value="100">
+            </div>
+            <div class="option-item">
+                <label>Auflösung</label>
+                <span>Demnächst</span>
+            </div>
+            <div class="option-item">
+                <label>Sprache</label>
+                <span>Deutsch</span>
+            </div>
+            <div class="menu-buttons">
+                <button id="options-back-btn">Zurück</button>
+            </div>
+        </div>
+
         <!-- Game Screen (initially hidden) -->
         <div id="game-screen" style="display: none;">
-            <canvas id="rpgCanvas"></canvas>
+            <canvas id="gameCanvas"></canvas>
             <div id="rpg-ui">
                 <p id="level">Level: 1</p>
                 <p id="experience">Erfahrung: 0/100</p>

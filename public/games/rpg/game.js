@@ -11,22 +11,7 @@ let player, enemies = [];
 let canvas, ctx, gameLoop, keys = {};
 
 // UI Elements
-const ui = {
-    // Screens
-    titleScreen: document.getElementById('title-screen'),
-    gameScreen: document.getElementById('game-screen'),
-    
-    // Buttons
-    newGameBtn: document.getElementById('new-game-btn'),
-    loadGameBtn: document.getElementById('load-game-btn'),
-    optionsBtn: document.getElementById('options-btn'),
-    exitBtn: document.getElementById('exit-rpg-btn'),
-    
-    // Game UI
-    levelEl: document.getElementById('level'),
-    experienceEl: document.getElementById('experience'),
-    healthEl: document.getElementById('health'),
-};
+let ui = {};
 
 // Game state
 let gameState = {
@@ -44,6 +29,26 @@ function init() {
     // Set up canvas
     canvas = document.getElementById('gameCanvas');
     ctx = canvas.getContext('2d');
+
+    // Populate UI object
+    ui = {
+        // Screens
+        titleScreen: document.getElementById('title-screen'),
+        gameScreen: document.getElementById('game-screen'),
+        optionsScreen: document.getElementById('options-screen'),
+
+        // Buttons
+        newGameBtn: document.getElementById('new-game-btn'),
+        loadGameBtn: document.getElementById('load-game-btn'),
+        optionsBtn: document.getElementById('options-btn'),
+        exitBtn: document.getElementById('exit-rpg-btn'),
+        optionsBackBtn: document.getElementById('options-back-btn'),
+
+        // Game UI
+        levelEl: document.getElementById('level'),
+        experienceEl: document.getElementById('experience'),
+        healthEl: document.getElementById('health'),
+    };
     
     // Set canvas size
     resizeCanvas();
@@ -72,9 +77,10 @@ function setupEventListeners() {
         alert('Laden-Funktion noch nicht implementiert.');
     });
     ui.optionsBtn.addEventListener('click', () => {
-        console.log('Options clicked - functionality to be implemented.');
-        alert('Optionen-Funktion noch nicht implementiert.');
+        console.log("Options button clicked!");
+        showScreen('options');
     });
+    ui.optionsBackBtn.addEventListener('click', () => showScreen('title'));
     ui.exitBtn.addEventListener('click', () => {
         console.log('Exit to main menu.');
         // This assumes the game is embedded and can talk to a parent window.
@@ -86,14 +92,19 @@ function setupEventListeners() {
 
 // Show a specific screen
 function showScreen(screenId) {
+    console.log(`showScreen called with: ${screenId}`);
     // Hide all screens
     if (ui.titleScreen) ui.titleScreen.style.display = 'none';
     if (ui.gameScreen) ui.gameScreen.style.display = 'none';
+    if (ui.optionsScreen) ui.optionsScreen.style.display = 'none';
     
     // Show the requested screen
     switch(screenId) {
         case 'title':
             if (ui.titleScreen) ui.titleScreen.style.display = 'flex'; // Use flex to center content
+            break;
+        case 'options':
+            if (ui.optionsScreen) ui.optionsScreen.style.display = 'flex'; // Use flex to center content
             break;
         case 'game':
             if (ui.gameScreen) ui.gameScreen.style.display = 'block';
