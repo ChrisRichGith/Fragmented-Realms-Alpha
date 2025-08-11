@@ -43,6 +43,71 @@
             </div>
         </div>
 
+        <!-- Character Creation Screen (initially hidden) -->
+        <div id="character-creation-screen" style="display: none;">
+            <h2>Charaktererstellung</h2>
+            <div class="class-selection-container">
+                <!-- Krieger -->
+                <div class="class-card" data-class="warrior">
+                    <div class="class-portrait-placeholder"></div>
+                    <h3>Krieger</h3>
+                    <p>Ein standhafter Tank, der sich durch hohe Verteidigung und Stärke auszeichnet.</p>
+                    <div class="gender-selector">
+                        <button class="gender-btn" data-gender="male">Männlich</button>
+                        <button class="gender-btn" data-gender="female">Weiblich</button>
+                    </div>
+                    <button class="choose-class-btn">Wählen</button>
+                </div>
+                <!-- Magier -->
+                <div class="class-card" data-class="mage">
+                    <div class="class-portrait-placeholder"></div>
+                    <h3>Magier</h3>
+                    <p>Ein mächtiger Support-Charakter, der das Schlachtfeld mit Zaubern kontrolliert.</p>
+                    <div class="gender-selector">
+                        <button class="gender-btn" data-gender="male">Männlich</button>
+                        <button class="gender-btn" data-gender="female">Weiblich</button>
+                    </div>
+                    <button class="choose-class-btn">Wählen</button>
+                </div>
+                <!-- Schurke -->
+                <div class="class-card" data-class="rogue">
+                    <div class="class-portrait-placeholder"></div>
+                    <h3>Schurke</h3>
+                    <p>Ein agiler DPS-Charakter, der aus den Schatten zuschlägt und hohen Schaden verursacht.</p>
+                    <div class="gender-selector">
+                        <button class="gender-btn" data-gender="male">Männlich</button>
+                        <button class="gender-btn" data-gender="female">Weiblich</button>
+                    </div>
+                    <button class="choose-class-btn">Wählen</button>
+                </div>
+                <!-- Priester -->
+                <div class="class-card" data-class="priest">
+                    <div class="class-portrait-placeholder"></div>
+                    <h3>Priester</h3>
+                    <p>Ein hingebungsvoller Heiler, der seine Verbündeten am Leben erhält.</p>
+                    <div class="gender-selector">
+                        <button class="gender-btn" data-gender="male">Männlich</button>
+                        <button class="gender-btn" data-gender="female">Weiblich</button>
+                    </div>
+                    <button class="choose-class-btn">Wählen</button>
+                </div>
+                <!-- Bogenschütze -->
+                <div class="class-card" data-class="archer">
+                    <div class="class-portrait-placeholder"></div>
+                    <h3>Bogenschütze</h3>
+                    <p>Ein präziser Fernkämpfer, der seine Gegner aus der Distanz ausschaltet.</p>
+                    <div class="gender-selector">
+                        <button class="gender-btn" data-gender="male">Männlich</button>
+                        <button class="gender-btn" data-gender="female">Weiblich</button>
+                    </div>
+                    <button class="choose-class-btn">Wählen</button>
+                </div>
+            </div>
+             <div class="menu-buttons">
+                <button id="creation-back-btn">Zurück zum Titelbildschirm</button>
+            </div>
+        </div>
+
         <!-- Game Screen (initially hidden) -->
         <div id="game-screen" style="display: none;">
             <canvas id="gameCanvas"></canvas>

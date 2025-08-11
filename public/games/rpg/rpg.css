@@ -186,3 +186,104 @@ input[type=range]::-moz-range-thumb {
     background: #f5eacb;
     cursor: pointer;
 }
+
+/* Character Creation Screen */
+#character-creation-screen {
+    background: rgba(0, 0, 0, 0.85);
+    padding: 40px;
+    border: 2px solid #c9b037;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 90%;
+    max-width: 1200px; /* Wider for class selection */
+    color: #f5eacb;
+}
+
+#character-creation-screen h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.class-selection-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    width: 100%;
+}
+
+.class-card {
+    background: rgba(40, 30, 20, 0.7);
+    border: 2px solid #6d4c41; /* Wood-like border */
+    border-radius: 10px;
+    padding: 20px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.class-card:hover {
+    border-color: #c9b037;
+    transform: translateY(-5px);
+}
+
+.class-portrait-placeholder {
+    width: 150px;
+    height: 150px;
+    background: #1a1a2e;
+    border: 1px dashed #c9b037;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8em;
+    color: #9e9e9e;
+}
+.class-portrait-placeholder::after {
+    content: 'Porträt';
+}
+
+.class-card h3 {
+    font-size: 1.5em;
+    color: #f5eacb;
+}
+
+.class-card p {
+    font-size: 0.9em;
+    font-family: 'Times New Roman', Times, serif; /* Different font for description */
+    color: #ccc;
+    min-height: 60px;
+}
+
+.gender-selector {
+    display: flex;
+    gap: 10px;
+}
+
+.gender-selector .gender-btn {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    background: #2a3a4a;
+    border: 1px solid #c9b037;
+    color: #f5eacb;
+    cursor: pointer;
+}
+
+.gender-selector .gender-btn.active {
+    background: #c9b037;
+    color: #1a1a2e;
+    font-weight: bold;
+}
+
+.choose-class-btn {
+    margin-top: auto; /* Pushes button to the bottom */
+    width: 100%;
+}

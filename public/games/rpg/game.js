@@ -13,15 +13,33 @@ let canvas, ctx, gameLoop, keys = {};
 // UI Elements
 let ui = {};
 
+const CLASS_STATS = {
+    warrior: { strength: 10, dexterity: 5, intelligence: 3, vitality: 12 },
+    mage:    { strength: 3, dexterity: 6, intelligence: 12, vitality: 6 },
+    rogue:   { strength: 5, dexterity: 12, intelligence: 5, vitality: 8 },
+    priest:  { strength: 4, dexterity: 7, intelligence: 10, vitality: 9 },
+    archer:  { strength: 6, dexterity: 11, intelligence: 6, vitality: 7 },
+};
+
 // Game state
 let gameState = {
-    level: 1,
-    experience: 0,
-    experienceToNext: 100,
-    health: 100,
-    maxHealth: 100,
+    player: {
+        name: 'Player',
+        class: null,
+        gender: null,
+        level: 1,
+        experience: 0,
+        experienceToNext: 100,
+        stats: {
+            strength: 0,
+            dexterity: 0,
+            intelligence: 0,
+            vitality: 0
+        },
+        health: 0,
+        maxHealth: 0,
+    },
     isGameOver: false,
-    playerName: 'Player'
 };
 
 // Initialize game
@@ -36,6 +54,7 @@ function init() {
         titleScreen: document.getElementById('title-screen'),
         gameScreen: document.getElementById('game-screen'),
         optionsScreen: document.getElementById('options-screen'),
+        characterCreationScreen: document.getElementById('character-creation-screen'),
 
         // Buttons
         newGameBtn: document.getElementById('new-game-btn'),
@@ -43,6 +62,7 @@ function init() {
         optionsBtn: document.getElementById('options-btn'),
         exitBtn: document.getElementById('exit-rpg-btn'),
         optionsBackBtn: document.getElementById('options-back-btn'),
+        creationBackBtn: document.getElementById('creation-back-btn'),
 
         // Game UI
         levelEl: document.getElementById('level'),
@@ -96,7 +116,7 @@ function setupEventListeners() {
         button.addEventListener('click', playClickSound);
     });
 
-    ui.newGameBtn.addEventListener('click', () => showScreen('game'));
+    ui.newGameBtn.addEventListener('click', () => showScreen('character-creation'));
     ui.loadGameBtn.addEventListener('click', () => {
         console.log('Load Game clicked - functionality to be implemented.');
         alert('Laden-Funktion noch nicht implementiert.');
@@ -106,6 +126,7 @@ function setupEventListeners() {
         showScreen('options');
     });
     ui.optionsBackBtn.addEventListener('click', () => showScreen('title'));
+    ui.creationBackBtn.addEventListener('click', () => showScreen('title'));
     ui.exitBtn.addEventListener('click', () => {
         window.close();
     });
@@ -117,6 +138,32 @@ function setupEventListeners() {
     ui.sfxVolumeSlider.addEventListener('input', (e) => {
         if(ui.sfxClick) ui.sfxClick.volume = e.target.value / 100;
     });
+
+    // Character Creation Event Listeners
+    const classCards = document.querySelectorAll('.class-card');
+    classCards.forEach(card => {
+        const genderButtons = card.querySelectorAll('.gender-btn');
+        genderButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Remove active class from sibling
+                genderButtons.forEach(s => s.classList.remove('active'));
+                // Add active class to clicked button
+                e.currentTarget.classList.add('active');
+            });
+        });
+
+        const chooseBtn = card.querySelector('.choose-class-btn');
+        chooseBtn.addEventListener('click', () => {
+            const chosenClass = card.dataset.class;
+            const activeGenderBtn = card.querySelector('.gender-btn.active');
+            if (!activeGenderBtn) {
+                alert('Bitte wählen Sie ein Geschlecht.');
+                return;
+            }
+            const chosenGender = activeGenderBtn.dataset.gender;
+            initializePlayer(chosenClass, chosenGender);
+        });
+    });
 }
 
 // Show a specific screen
@@ -126,6 +173,7 @@ function showScreen(screenId) {
     if (ui.titleScreen) ui.titleScreen.style.display = 'none';
     if (ui.gameScreen) ui.gameScreen.style.display = 'none';
     if (ui.optionsScreen) ui.optionsScreen.style.display = 'none';
+    if (ui.characterCreationScreen) ui.characterCreationScreen.style.display = 'none';
     
     // Show the requested screen
     switch(screenId) {
@@ -135,6 +183,9 @@ function showScreen(screenId) {
             break;
         case 'options':
             if (ui.optionsScreen) ui.optionsScreen.style.display = 'flex'; // Use flex to center content
+            break;
+        case 'character-creation':
+            if (ui.characterCreationScreen) ui.characterCreationScreen.style.display = 'flex';
             break;
         case 'game':
             if (ui.gameScreen) ui.gameScreen.style.display = 'block';
@@ -241,21 +292,23 @@ function checkCollisions() {
             // Check if it's an experience orb (smaller than enemies)
             if (enemy.width < 20) {
                 // Experience orb
-                gameState.experience += 10;
-                if (gameState.experience >= gameState.experienceToNext) {
-                    gameState.level++;
-                    gameState.experience -= gameState.experienceToNext;
-                    gameState.experienceToNext = Math.floor(gameState.experienceToNext * 1.2);
-                    gameState.maxHealth += 10;
-                    gameState.health = gameState.maxHealth;
+                gameState.player.experience += 10;
+                if (gameState.player.experience >= gameState.player.experienceToNext) {
+                    gameState.player.level++;
+                    gameState.player.experience -= gameState.player.experienceToNext;
+                    gameState.player.experienceToNext = Math.floor(gameState.player.experienceToNext * 1.2);
+                    // For simplicity, we'll just add to vitality on level up for now
+                    gameState.player.stats.vitality++;
+                    gameState.player.maxHealth = gameState.player.stats.vitality * 10; // Recalculate max health
+                    gameState.player.health = gameState.player.maxHealth; // Full heal on level up
                 }
                 enemies.splice(i, 1);
             } else {
                 // Enemy collision
-                gameState.health -= 10;
+                gameState.player.health -= 10;
                 enemies.splice(i, 1);
                 
-                if (gameState.health <= 0) {
+                if (gameState.player.health <= 0) {
                     gameOver();
                 }
             }
@@ -263,9 +316,9 @@ function checkCollisions() {
     }
     
     // Update UI
-    ui.levelEl.textContent = `Level: ${gameState.level}`;
-    ui.experienceEl.textContent = `Erfahrung: ${gameState.experience}/${gameState.experienceToNext}`;
-    ui.healthEl.textContent = `Leben: ${gameState.health}/${gameState.maxHealth}`;
+    ui.levelEl.textContent = `Level: ${gameState.player.level}`;
+    ui.experienceEl.textContent = `Erfahrung: ${gameState.player.experience}/${gameState.player.experienceToNext}`;
+    ui.healthEl.textContent = `Leben: ${gameState.player.health}/${gameState.player.maxHealth}`;
 }
 
 function isColliding(obj1, obj2) {
@@ -277,29 +330,19 @@ function isColliding(obj1, obj2) {
 
 function gameOver() {
     gameState.isGameOver = true;
-    // showScreen('gameOver'); // Game over screen not implemented yet
     console.log("Game Over!");
+    // Later, this will show a game over screen with stats from gameState.player
+    showScreen('title'); // Return to title screen for now
 }
 
 function resetGame() {
-    gameState = {
-        level: 1,
-        experience: 0,
-        experienceToNext: 100,
-        health: 100,
-        maxHealth: 100,
-        isGameOver: false
-    };
+    // This function is now for resetting the in-game state, not the player character data.
+    // The player object on the canvas is created in a new function after class selection.
     
-    player = {
-        x: canvas.width / 2 - config.playerSize / 2,
-        y: canvas.height / 2 - config.playerSize / 2,
-        width: config.playerSize,
-        height: config.playerSize
-    };
-    
+    // Reset enemies
     enemies = [];
     
+    // Ensure game loop is running for the game screen
     if (gameLoop) {
         cancelAnimationFrame(gameLoop);
     }
@@ -313,6 +356,33 @@ function handleKeyDown(e) {
 
 function handleKeyUp(e) {
     keys[e.key] = false;
+}
+
+function initializePlayer(chosenClass, chosenGender) {
+    gameState.player.class = chosenClass;
+    gameState.player.gender = chosenGender;
+    gameState.player.stats = { ...CLASS_STATS[chosenClass] };
+
+    // Calculate derived stats
+    gameState.player.maxHealth = gameState.player.stats.vitality * 10;
+    gameState.player.health = gameState.player.maxHealth;
+
+    // Reset level-specific stats
+    gameState.player.level = 1;
+    gameState.player.experience = 0;
+    gameState.player.experienceToNext = 100;
+    gameState.isGameOver = false;
+
+    // Create the player object for the canvas
+    player = {
+        x: canvas.width / 2 - config.playerSize / 2,
+        y: canvas.height / 2 - config.playerSize / 2,
+        width: config.playerSize,
+        height: config.playerSize
+    };
+
+    console.log(`Character created: ${chosenGender} ${chosenClass}`);
+    showScreen('game');
 }
 
 // Start the game
