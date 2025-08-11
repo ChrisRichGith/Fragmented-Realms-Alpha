@@ -83,7 +83,12 @@ function setupEventListeners() {
     ui.optionsBackBtn.addEventListener('click', () => showScreen('title'));
     ui.exitBtn.addEventListener('click', () => {
         console.log('Exit to main menu.');
-        // This assumes the game is embedded and can talk to a parent window.
+        // Hide the game container for immediate visual feedback
+        const gameContainer = document.getElementById('game-container');
+        if (gameContainer) {
+            gameContainer.style.display = 'none';
+        }
+        // Send message to the parent application to formally close the game
         if (window.parent) {
             window.parent.postMessage({ type: 'game:exit' }, '*');
         }
