@@ -48,6 +48,12 @@ function init() {
         levelEl: document.getElementById('level'),
         experienceEl: document.getElementById('experience'),
         healthEl: document.getElementById('health'),
+
+    // Audio
+    bgMusic: document.getElementById('bg-music'),
+    sfxClick: document.getElementById('sfx-click'),
+    musicVolumeSlider: document.getElementById('music-volume'),
+    sfxVolumeSlider: document.getElementById('sfx-volume'),
     };
     
     // Set canvas size
@@ -64,6 +70,20 @@ function init() {
     gameLoop = requestAnimationFrame(update);
 }
 
+// Audio control functions
+function playClickSound() {
+    if (ui.sfxClick) {
+        ui.sfxClick.currentTime = 0;
+        ui.sfxClick.play();
+    }
+}
+
+function playBgMusic() {
+    if (ui.bgMusic) {
+        ui.bgMusic.play().catch(e => console.error("Audio autoplay failed: ", e));
+    }
+}
+
 // Set up all event listeners
 function setupEventListeners() {
     // Game controls
@@ -71,6 +91,11 @@ function setupEventListeners() {
     document.addEventListener('keyup', handleKeyUp);
     
     // UI Buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('click', playClickSound);
+    });
+
     ui.newGameBtn.addEventListener('click', () => showScreen('game'));
     ui.loadGameBtn.addEventListener('click', () => {
         console.log('Load Game clicked - functionality to be implemented.');
@@ -83,6 +108,14 @@ function setupEventListeners() {
     ui.optionsBackBtn.addEventListener('click', () => showScreen('title'));
     ui.exitBtn.addEventListener('click', () => {
         window.close();
+    });
+
+    // Volume Sliders
+    ui.musicVolumeSlider.addEventListener('input', (e) => {
+        if(ui.bgMusic) ui.bgMusic.volume = e.target.value / 100;
+    });
+    ui.sfxVolumeSlider.addEventListener('input', (e) => {
+        if(ui.sfxClick) ui.sfxClick.volume = e.target.value / 100;
     });
 }
 
@@ -98,6 +131,7 @@ function showScreen(screenId) {
     switch(screenId) {
         case 'title':
             if (ui.titleScreen) ui.titleScreen.style.display = 'flex'; // Use flex to center content
+            playBgMusic();
             break;
         case 'options':
             if (ui.optionsScreen) ui.optionsScreen.style.display = 'flex'; // Use flex to center content
