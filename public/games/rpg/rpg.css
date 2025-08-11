@@ -1,16 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
 body, html {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #1a1a2e;
+    background-color: #1a1a2e; /* Dark blue, fallback */
+    background-image: url('../../../images/Background.png'); /* Placeholder for a real background */
+    background-size: cover;
+    background-position: center;
     color: white;
-    font-family: Arial, sans-serif;
+    font-family: 'Cinzel', serif;
 }
 
-#rpg-world {
+#game-container {
     position: relative;
     width: 100vw;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#title-screen {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 40px 60px;
+    border: 2px solid #c9b037; /* Gold-like border */
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(201, 176, 55, 0.5);
+}
+
+#game-title {
+    font-size: 4em;
+    font-weight: 700;
+    color: #f5eacb; /* Creamy white */
+    text-shadow: 2px 2px 5px #000;
+    margin-bottom: 30px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu-buttons button {
+    background-color: #4a2c2a; /* Dark wood color */
+    color: #f5eacb;
+    border: 2px solid #c9b037;
+    border-radius: 5px;
+    padding: 12px 25px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.4em;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.menu-buttons button:hover {
+    background-color: #6d4c41; /* Lighter wood color */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.menu-buttons button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+#game-screen {
+    display: none;
+    width: 100%;
+    height: 100%;
 }
 
 #rpgCanvas {
@@ -23,7 +85,9 @@ body, html {
     position: absolute;
     bottom: 10px;
     left: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #c9b037;
+    color: #f5eacb;
 }

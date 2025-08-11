@@ -23,7 +23,7 @@ let player, bullets = [], enemies = [], enemyBullets = [];
 let explosions = [];
 let canvas, ctx, gameLoop, keys = {};
 let bossSpawnTimer = config.bossInterval;
-let playerCanvas;
+let playerImage = new Image();
 let enemyImage = new Image();
 let bossImage = new Image();
 let powerUpImages = {
@@ -109,16 +109,7 @@ function init() {
     window.addEventListener('resize', resizeCanvas);
 
     // Load images
-    playerCanvas = document.createElement('canvas');
-    gifler('Player_Pegasus.gif').frames(playerCanvas, function (c, frame) {
-        // Set canvas size to the frame's size
-        c.canvas.width = frame.width;
-        c.canvas.height = frame.height;
-        // Draw the frame
-        c.clearRect(0, 0, frame.width, frame.height);
-        c.drawImage(frame.buffer, 0, 0);
-    });
-
+    playerImage.src = 'Player.png';
     enemyImage.src = 'Gegner.png';
     bossImage.src = 'Boss_01.png';
     explosionImage.src = 'explosion.png';
@@ -309,8 +300,8 @@ function draw() {
 
     // Draw player
     if (player) {
-        if (playerCanvas && playerCanvas.width > 0) {
-            ctx.drawImage(playerCanvas, player.x, player.y, player.width, player.height);
+        if (playerImage.complete && playerImage.naturalHeight !== 0) {
+            ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
         } else {
             ctx.fillStyle = '#3498db';
             ctx.fillRect(player.x, player.y, player.width, player.height);
