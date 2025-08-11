@@ -109,7 +109,7 @@ function init() {
     window.addEventListener('resize', resizeCanvas);
 
     // Load images
-    playerImage.src = 'Player_Pegasus.gif';
+    playerImage.src = 'Player.png';
     enemyImage.src = 'Gegner.png';
     bossImage.src = 'Boss_01.png';
     explosionImage.src = 'explosion.png';
