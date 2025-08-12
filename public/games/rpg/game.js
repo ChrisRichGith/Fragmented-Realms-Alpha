@@ -45,6 +45,7 @@ function init() {
         exitBtn: document.getElementById('exit-rpg-btn'),
         optionsBackBtn: document.getElementById('options-back-btn'),
         creationBackBtn: document.getElementById('creation-back-btn'),
+        startGameBtn: document.getElementById('start-game-btn'),
 
         // Game UI
         levelEl: document.getElementById('level'),
@@ -112,6 +113,7 @@ function setupEventListeners() {
     });
     ui.optionsBackBtn.addEventListener('click', () => showScreen('title'));
     ui.creationBackBtn.addEventListener('click', () => showScreen('title'));
+    ui.startGameBtn.addEventListener('click', () => showScreen('game'));
     ui.exitBtn.addEventListener('click', () => {
         window.close();
     });
@@ -159,7 +161,7 @@ function populateCharacterCreation() {
         { name: 'Magier', img: '/images/Magier.png', description: 'Ein mächtiger Zauberer, der die arkanen Künste beherrscht.' },
         { name: 'Schurke', img: '/images/Schurke.png', description: 'Ein listiger Dieb, der aus den Schatten zuschlägt.' },
         { name: 'Ranger', img: '/images/Ranger.png', description: 'Ein geschickter Jäger, der mit Pfeil und Bogen umgehen kann.' },
-        { name: 'Arkaner Komponist', img: '/images/Arkaner Komponistpng', description: 'Ein seltener Barde, der Musik und Magie vereint.' }
+        { name: 'Arkaner Komponist', img: '/images/Arkaner Komponist.png', description: 'Ein seltener Barde, der Musik und Magie vereint.' }
     ];
 
     const container = document.getElementById('character-cards-container');
@@ -173,6 +175,14 @@ function populateCharacterCreation() {
             <h3>${char.name}</h3>
             <p>${char.description}</p>
         `;
+
+        card.addEventListener('click', () => {
+            // Remove 'selected' class from all cards
+            document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+            // Add 'selected' class to the clicked card
+            card.classList.add('selected');
+            ui.startGameBtn.disabled = false;
+        });
         container.appendChild(card);
     });
 }

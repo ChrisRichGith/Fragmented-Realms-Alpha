@@ -220,11 +220,12 @@ input[type=range]::-moz-range-thumb {
 }
 
 .character-card {
+    box-sizing: border-box;
     background: rgba(40, 30, 30, 0.85);
     border: 2px solid #8a6d4f;
     border-radius: 10px;
-    padding: 20px;
-    width: 200px;
+    padding: 15px;
+    width: 210px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -246,8 +247,8 @@ input[type=range]::-moz-range-thumb {
 }
 
 .character-card img {
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 15px;
