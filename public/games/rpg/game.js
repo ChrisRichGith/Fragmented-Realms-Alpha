@@ -36,6 +36,7 @@ function init() {
         titleScreen: document.getElementById('title-screen'),
         gameScreen: document.getElementById('game-screen'),
         optionsScreen: document.getElementById('options-screen'),
+        characterCreationScreen: document.getElementById('character-creation-screen'),
 
         // Buttons
         newGameBtn: document.getElementById('new-game-btn'),
@@ -43,6 +44,8 @@ function init() {
         optionsBtn: document.getElementById('options-btn'),
         exitBtn: document.getElementById('exit-rpg-btn'),
         optionsBackBtn: document.getElementById('options-back-btn'),
+        creationBackBtn: document.getElementById('creation-back-btn'),
+        startGameBtn: document.getElementById('start-game-btn'),
 
         // Game UI
         levelEl: document.getElementById('level'),
@@ -65,6 +68,9 @@ function init() {
     
     // Show title screen
     showScreen('title');
+
+    // Populate character creation screen
+    populateCharacterCreation();
     
     // Start game loop (paused until game starts)
     gameLoop = requestAnimationFrame(update);
@@ -96,7 +102,7 @@ function setupEventListeners() {
         button.addEventListener('click', playClickSound);
     });
 
-    ui.newGameBtn.addEventListener('click', () => showScreen('game'));
+    ui.newGameBtn.addEventListener('click', () => showScreen('character-creation'));
     ui.loadGameBtn.addEventListener('click', () => {
         console.log('Load Game clicked - functionality to be implemented.');
         alert('Laden-Funktion noch nicht implementiert.');
@@ -106,6 +112,8 @@ function setupEventListeners() {
         showScreen('options');
     });
     ui.optionsBackBtn.addEventListener('click', () => showScreen('title'));
+    ui.creationBackBtn.addEventListener('click', () => showScreen('title'));
+    ui.startGameBtn.addEventListener('click', () => showScreen('game'));
     ui.exitBtn.addEventListener('click', () => {
         window.close();
     });
@@ -126,6 +134,7 @@ function showScreen(screenId) {
     if (ui.titleScreen) ui.titleScreen.style.display = 'none';
     if (ui.gameScreen) ui.gameScreen.style.display = 'none';
     if (ui.optionsScreen) ui.optionsScreen.style.display = 'none';
+    if (ui.characterCreationScreen) ui.characterCreationScreen.style.display = 'none';
     
     // Show the requested screen
     switch(screenId) {
@@ -136,11 +145,47 @@ function showScreen(screenId) {
         case 'options':
             if (ui.optionsScreen) ui.optionsScreen.style.display = 'flex'; // Use flex to center content
             break;
+        case 'character-creation':
+            if (ui.characterCreationScreen) ui.characterCreationScreen.style.display = 'flex';
+            break;
         case 'game':
             if (ui.gameScreen) ui.gameScreen.style.display = 'block';
             resetGame();
             break;
     }
+}
+
+function populateCharacterCreation() {
+    const characters = [
+        { name: 'Krieger', img: '/images/Krieger.png', description: 'Ein Meister des Nahkampfes, stark und widerstandsfähig.' },
+        { name: 'Kriegerin', img: '/images/Kriegerin.png', description: 'Eine Meisterin des Nahkampfes, stark und widerstandsfähig.' },
+        { name: 'Magier', img: '/images/Magier.png', description: 'Ein mächtiger Zauberer, der die arkanen Künste beherrscht.' },
+        { name: 'Schurke', img: '/images/Schurke.png', description: 'Ein listiger Dieb, der aus den Schatten zuschlägt.' },
+        { name: 'Ranger', img: '/images/Ranger.png', description: 'Ein geschickter Jäger, der mit Pfeil und Bogen umgehen kann.' },
+        { name: 'Arkaner Komponist', img: '/images/Arkaner Komponist.png', description: 'Ein seltener Barde, der Musik und Magie vereint.' }
+    ];
+
+    const container = document.getElementById('character-cards-container');
+    container.innerHTML = '';
+
+    characters.forEach(char => {
+        const card = document.createElement('div');
+        card.className = 'character-card';
+        card.innerHTML = `
+            <img src="${char.img}" alt="${char.name}">
+            <h3>${char.name}</h3>
+            <p>${char.description}</p>
+        `;
+
+        card.addEventListener('click', () => {
+            // Remove 'selected' class from all cards
+            document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+            // Add 'selected' class to the clicked card
+            card.classList.add('selected');
+            ui.startGameBtn.disabled = false;
+        });
+        container.appendChild(card);
+    });
 }
 
 function resizeCanvas() {
