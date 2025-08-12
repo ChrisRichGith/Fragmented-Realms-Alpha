@@ -157,8 +157,8 @@ function showScreen(screenId) {
 
 function populateCharacterCreation() {
     const characters = [
-        { name: 'Krieger', img: '/games/rpg/Krieger.png', description: 'Ein Meister des Nahkampfes, stark und widerstandsfähig.' },
-        { name: 'Kriegerin', img: '/games/rpg/Kriegerin.png', description: 'Eine Meisterin des Nahkampfes, stark und widerstandsfähig.' },
+        { name: 'Krieger', img: '/images/Krieger.png', description: 'Ein Meister des Nahkampfes, stark und widerstandsfähig.' },
+        { name: 'Kriegerin', img: '/images/Kriegerin.png', description: 'Eine Meisterin des Nahkampfes, stark und widerstandsfähig.' },
         { name: 'Magier', img: '/images/Magier.png', description: 'Ein mächtiger Zauberer, der die arkanen Künste beherrscht.' },
         { name: 'Schurke', img: '/images/Schurke.png', description: 'Ein listiger Dieb, der aus den Schatten zuschlägt.' },
         { name: 'Ranger', img: '/images/Ranger.png', description: 'Ein geschickter Jäger, der mit Pfeil und Bogen umgehen kann.' },
